@@ -24,4 +24,4 @@ m1 <- lm(Murder ~ Income * Population,
 plot_me(m1, 'Income', 'Population')
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png)
+![plot of chunk murder-me-example](figure/murder-me-example-1.png)
