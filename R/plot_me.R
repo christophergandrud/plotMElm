@@ -12,6 +12,16 @@
 #'
 #' @return a \code{gg} class ggplot2 object
 #'
+#' @examples
+#' # Estimate model
+#' states <- as.data.frame(state.x77)
+#' m1 <- lm(Murder ~ Income * Population,
+#' data = states)
+#'
+#' # Plot marginal effect of Income across the observed range of Population
+#' # on the Murder rate
+#' plot_me(m1, 'Income', 'Population')
+#'
 #' @source Inspired by:
 #' \url{http://www.carlislerainey.com/2013/08/27/creating-marginal-effect-plots-for-linear-regression-models-in-r/}
 #'
@@ -63,7 +73,7 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 90) {
         lower <- dy_dx - 1.96*se_dy_dx
     }
 
-    parts <- cbind(fitted2, dy_dx, lower, upper) %>% data.frame
+    parts <- data.frame(cbind(fitted2, dy_dx, lower, upper))
 
     ggplot(parts, aes(fitted2, dy_dx)) +
         geom_rug(data = term2_dist, aes(x = term2, y = term1), sides = 'b',

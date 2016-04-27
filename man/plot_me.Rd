@@ -31,4 +31,15 @@ a \code{gg} class ggplot2 object
 \description{
 Plot marginal effects from two-way interactions in linear regressions
 }
+\examples{
+# Estimate model
+states <- as.data.frame(state.x77)
+m1 <- lm(Murder ~ Income * Population,
+data = states)
+
+# Plot marginal effect of Income across the observed range of Population
+# on the Murder rate
+plot_me(m1, 'Income', 'Population')
+
+}
 
