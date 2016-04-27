@@ -13,11 +13,11 @@ plot_me(obj, term1, term2, fitted2, ci = 90)
 \arguments{
 \item{obj}{fitted model object from \code{lm}.}
 
-\item{term1}{the first constitutive term of the interaction's variable name.
-Note \code{term1} and \code{term2} must be entered in the order in which
-they are entered into the \code{lm} model.}
+\item{term1}{character string of the first constitutive term of the
+interaction's variable name.}
 
-\item{term2}{character string of the second constitutive variable's name.}
+\item{term2}{character string of the second constitutive term of the
+interaction's variable name.}
 
 \item{fitted2}{numeric vector of fitted values of \code{term2} to plot for.
 If unspecified, then all unique observed values are used.}

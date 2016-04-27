@@ -1,10 +1,10 @@
 #' Plot marginal effects from two-way interactions in linear regressions
 #'
 #' @param obj fitted model object from \code{lm}.
-#' @param term1 the first constitutive term of the interaction's variable name.
-#' Note \code{term1} and \code{term2} must be entered in the order in which
-#' they are entered into the \code{lm} model.
-#' @param term2 character string of the second constitutive variable's name.
+#' @param term1 character string of the first constitutive term of the
+#' interaction's variable name.
+#' @param term2 character string of the second constitutive term of the
+#' interaction's variable name.
 #' @param fitted2 numeric vector of fitted values of \code{term2} to plot for.
 #' If unspecified, then all unique observed values are used.
 #' @param ci numeric. Either 90 or 95 indicating that the 90 or 95% confidence
@@ -27,13 +27,16 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 90) {
     beta_hat <- coef(obj)
     cov <- vcov(obj)
 
-    int_term <- sprintf('%s:%s', term1, term2)
+    int_term12 <- sprintf('%s:%s', term1, term2)
+    int_term21 <- sprintf('%s:%s', term2, term1)
 
     if (!(term1 %in% names(beta_hat))) stop(sprintf('%s not found.', term1),
                                             call. = F)
-    if (!(int_term %in% names(beta_hat))) {
-        stop(sprintf('Interaction term-- %s --not found.', int_term), call. = F)
+    if (all(!(c(int_term12, int_term21) %in% names(beta_hat)))) {
+        stop('Interaction term not found.', call. = F)
     }
+    if (int_term12 %in% names(beta_hat)) int_term <- int_term12
+    else int_term <- int_term21
 
     term2_dist <- obj$model[, term2]
     term2_dist <- data.frame(fake_y = 0, real_x = term2_dist)
