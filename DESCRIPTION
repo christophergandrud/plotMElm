@@ -1,7 +1,7 @@
 Package: plotMElm
 Type: Package
 Title: Plot Marginal Effects from Linear Models
-Description: Plot marginal effects from interactions estimated
+Description: Plot marginal effects for interactions estimated
     from linear models.
 Version: 0.1.0
 Date: 2016-04-27
