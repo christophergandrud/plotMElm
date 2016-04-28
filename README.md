@@ -4,6 +4,8 @@ plotMElm
 A simple R package to plot marginal effects from interactions estimated
 from linear models.
 
+[![Build Status](https://travis-ci.org/christophergandrud/plotMElm.svg?branch=master)](https://travis-ci.org/christophergandrud/plotMElm)
+
 # Example
 
 The package contains one simply function: `plot_me` for plotting marginal
