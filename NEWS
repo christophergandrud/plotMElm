@@ -1,0 +1,7 @@
+# Version 0.1.1
+
+- Allow any confidence level with `ci` argument.
+
+- Return a data frame instead of a plot with `plot` argument.
+
+Thanks to Vincent Arel-Bundock for both contributions.

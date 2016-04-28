@@ -37,12 +37,14 @@ Plot marginal effects from two-way interactions in linear regressions
 \examples{
 # Estimate model
 states <- as.data.frame(state.x77)
-m1 <- lm(Murder ~ Income * Population,
-data = states)
+m1 <- lm(Murder ~ Income * Population, data = states)
 
 # Plot marginal effect of Income across the observed range of Population
 # on the Murder rate
-plot_me(m1, 'Income', 'Population')
+plot_me(m1, 'Income', 'Population', ci = 95)
+
+# Return marginal effects as a data frame
+plot_me(m1, 'Income', 'Population', plot = FALSE)
 
 }
 
