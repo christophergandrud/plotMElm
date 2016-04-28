@@ -9,6 +9,8 @@
 #' If unspecified, then all unique observed values are used.
 #' @param ci numeric. confidence interval level, expressed on the ]0,100[
 #' interval.
+#' @param plot boolean. return plot if TRUE; return data.frame of marginal
+#' effects estimates if FALSE
 #'
 #' @return a \code{gg} class ggplot2 object
 #'
@@ -29,7 +31,7 @@
 #'
 #' @export
 
-plot_me <- function(obj, term1, term2, fitted2, ci = 90) {
+plot_me <- function(obj, term1, term2, fitted2, ci = 90, plot=TRUE) {
 
     if (class(obj) != 'lm') stop('Only lm model objects can be used.',
             call. = FALSE)
@@ -67,14 +69,18 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 90) {
     lower <- dy_dx - z * se_dy_dx
 
     parts <- data.frame(cbind(fitted2, dy_dx, lower, upper))
-
-    ggplot(parts, aes(fitted2, dy_dx)) +
-        geom_rug(data = term2_dist, aes(x = term2, y = term1), sides = 'b',
-                 alpha = 0.1) +
-        geom_hline(yintercept = 0, linetype = 'dotted') +
-        geom_line() +
-        geom_ribbon(ymin = lower, ymax = upper, alpha = 0.1) +
-        xlab(sprintf('\n%s', term2)) +
-        ylab(sprintf('Marginal effect of\n%s\n', term1)) +
-        theme_bw()
+    
+    if(plot){
+        ggplot(parts, aes(fitted2, dy_dx)) +
+            geom_rug(data = term2_dist, aes(x = term2, y = term1), sides = 'b',
+                     alpha = 0.1) +
+            geom_hline(yintercept = 0, linetype = 'dotted') +
+            geom_line() +
+            geom_ribbon(ymin = lower, ymax = upper, alpha = 0.1) +
+            xlab(sprintf('\n%s', term2)) +
+            ylab(sprintf('Marginal effect of\n%s\n', term1)) +
+            theme_bw()
+    }else{
+        return(parts)
+    }
 }
