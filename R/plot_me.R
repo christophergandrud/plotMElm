@@ -7,8 +7,10 @@
 #' interaction's variable name.
 #' @param fitted2 numeric vector of fitted values of \code{term2} to plot for.
 #' If unspecified, then all unique observed values are used.
-#' @param ci numeric. Either 90 or 95 indicating that the 90 or 95% confidence
-#' interval should be used.
+#' @param ci numeric. confidence interval level, expressed on the ]0,100[
+#' interval.
+#' @param plot boolean. return plot if TRUE; return data.frame of marginal
+#' effects estimates if FALSE
 #'
 #' @return a \code{gg} class ggplot2 object
 #'
@@ -29,7 +31,7 @@
 #'
 #' @export
 
-plot_me <- function(obj, term1, term2, fitted2, ci = 90) {
+plot_me <- function(obj, term1, term2, fitted2, ci = 90, plot=TRUE) {
 
     if (class(obj) != 'lm') stop('Only lm model objects can be used.',
             call. = FALSE)
@@ -61,27 +63,24 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 90) {
     se_dy_dx <- sqrt(cov[term1, term1] + fitted2 ^ 2 * cov[int_term, int_term] +
                          2 * fitted2 *cov[term1, int_term])
 
-    if (ci == 90) {
-        # 90% confidence intervals
-        upper <- dy_dx + 1.64*se_dy_dx
-        lower <- dy_dx - 1.64*se_dy_dx
-    }
-
-    else if (ci == 95) {
-        # 90% confidence intervals
-        upper <- dy_dx + 1.96*se_dy_dx
-        lower <- dy_dx - 1.96*se_dy_dx
-    }
+    # Confidence interval
+    z = qnorm(ci / 100)
+    upper <- dy_dx + z * se_dy_dx
+    lower <- dy_dx - z * se_dy_dx
 
     parts <- data.frame(cbind(fitted2, dy_dx, lower, upper))
-
-    ggplot(parts, aes(fitted2, dy_dx)) +
-        geom_rug(data = term2_dist, aes(x = term2, y = term1), sides = 'b',
-                 alpha = 0.1) +
-        geom_hline(yintercept = 0, linetype = 'dotted') +
-        geom_line() +
-        geom_ribbon(ymin = lower, ymax = upper, alpha = 0.1) +
-        xlab(sprintf('\n%s', term2)) +
-        ylab(sprintf('Marginal effect of\n%s\n', term1)) +
-        theme_bw()
+    
+    if(plot){
+        ggplot(parts, aes(fitted2, dy_dx)) +
+            geom_rug(data = term2_dist, aes(x = term2, y = term1), sides = 'b',
+                     alpha = 0.1) +
+            geom_hline(yintercept = 0, linetype = 'dotted') +
+            geom_line() +
+            geom_ribbon(ymin = lower, ymax = upper, alpha = 0.1) +
+            xlab(sprintf('\n%s', term2)) +
+            ylab(sprintf('Marginal effect of\n%s\n', term1)) +
+            theme_bw()
+    }else{
+        return(parts)
+    }
 }

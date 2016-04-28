@@ -8,7 +8,7 @@ Inspired by:
 \url{http://www.carlislerainey.com/2013/08/27/creating-marginal-effect-plots-for-linear-regression-models-in-r/}
 }
 \usage{
-plot_me(obj, term1, term2, fitted2, ci = 90)
+plot_me(obj, term1, term2, fitted2, ci = 90, plot = TRUE)
 }
 \arguments{
 \item{obj}{fitted model object from \code{lm}.}
@@ -22,8 +22,11 @@ interaction's variable name.}
 \item{fitted2}{numeric vector of fitted values of \code{term2} to plot for.
 If unspecified, then all unique observed values are used.}
 
-\item{ci}{numeric. Either 90 or 95 indicating that the 90 or 95% confidence
-interval should be used.}
+\item{ci}{numeric. confidence interval level, expressed on the ]0,100[
+interval.}
+
+\item{plot}{boolean. return plot if TRUE; return data.frame of marginal
+effects estimates if FALSE}
 }
 \value{
 a \code{gg} class ggplot2 object
