@@ -22,7 +22,7 @@ interaction's variable name.}
 \item{fitted2}{numeric vector of fitted values of \code{term2} to plot for.
 If unspecified, then all unique observed values are used.}
 
-\item{ci}{numeric. confidence interval level, expressed on the ]0,100[
+\item{ci}{numeric. confidence interval level, expressed on the ]0, 100[]
 interval.}
 
 \item{plot}{boolean. return plot if TRUE; return data.frame of marginal
@@ -45,6 +45,8 @@ plot_me(m1, 'Income', 'Population', ci = 95)
 
 # Return marginal effects as a data frame
 plot_me(m1, 'Income', 'Population', plot = FALSE)
+
+
 
 }
 

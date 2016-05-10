@@ -7,7 +7,7 @@
 #' interaction's variable name.
 #' @param fitted2 numeric vector of fitted values of \code{term2} to plot for.
 #' If unspecified, then all unique observed values are used.
-#' @param ci numeric. confidence interval level, expressed on the ]0,100[
+#' @param ci numeric. confidence interval level, expressed on the ]0, 100[]
 #' interval.
 #' @param plot boolean. return plot if TRUE; return data.frame of marginal
 #' effects estimates if FALSE
@@ -25,6 +25,8 @@
 #'
 #' # Return marginal effects as a data frame
 #' plot_me(m1, 'Income', 'Population', plot = FALSE)
+#'
+#'
 #'
 #' @source Inspired by:
 #' \url{http://www.carlislerainey.com/2013/08/27/creating-marginal-effect-plots-for-linear-regression-models-in-r/}
@@ -73,15 +75,29 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 90, plot = TRUE) {
     parts <- data.frame(cbind(fitted2, dy_dx, lower, upper))
 
     if (plot) {
-        ggplot(parts, aes(fitted2, dy_dx)) +
-            geom_rug(data = term2_dist, aes(x = term2, y = term1), sides = 'b',
-                     alpha = 0.1) +
-            geom_hline(yintercept = 0, linetype = 'dotted') +
-            geom_line() +
-            geom_ribbon(ymin = lower, ymax = upper, alpha = 0.1) +
-            xlab(sprintf('\n%s', term2)) +
-            ylab(sprintf('Marginal effect of\n%s\n', term1)) +
-            theme_bw()
+        if (length(parts$fitted2) > 5) {
+            ggplot(parts, aes(fitted2, dy_dx)) +
+                geom_rug(data = term2_dist, aes(x = term2, y = term1), sides = 'b',
+                         alpha = 0.1) +
+                geom_hline(yintercept = 0, linetype = 'dotted') +
+                geom_line() +
+                geom_ribbon(ymin = lower, ymax = upper, alpha = 0.1) +
+                xlab(sprintf('\n%s', term2)) +
+                ylab(sprintf('Marginal effect of\n%s\n', term1)) +
+                theme_bw()
+        }
+        else if (length(parts$fitted2) <= 5) {
+            ggplot(parts, aes(fitted2, dy_dx, ymin = lower, ymax = upper)) +
+              #  geom_rug(data = term2_dist, aes(x = term2, y = term1), sides = 'b',
+              #           alpha = 0.1) +
+                geom_hline(yintercept = 0, linetype = 'dotted') +
+                geom_pointrange() +
+                scale_x_continuous(breaks = parts$fitted) +
+                xlab(sprintf('\n%s', term2)) +
+                ylab(sprintf('Marginal effect of\n%s\n', term1)) +
+                theme_bw()
+        }
+
     } else {
         return(parts)
     }
