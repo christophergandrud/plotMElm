@@ -46,5 +46,5 @@ plot_me(m2, 'wt', 'cyl')
 
 ## See also 
 
-The [interplot](https://cran.r-project.org/web/packages/interplot/) package also has many of the same capabilities as *plotMElm*.
+The [interplot](https://cran.r-project.org/package=interplot) package also has many of the same capabilities as *plotMElm*.
 
