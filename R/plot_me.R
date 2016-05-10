@@ -29,8 +29,9 @@
 #'
 #'
 #' @source Inspired by:
-#' \url{http://www.carlislerainey.com/2013/08/27/creating-marginal-effect-plots-for-linear-regression-models-in-r/}
+#' \url{http://www.statsblogs.com/2013/08/27/creating-marginal-effect-plots-for-linear-regression-models-in-r/}
 #'
+#' @importFrom stats coef qnorm vcov
 #' @import ggplot2
 #'
 #' @export

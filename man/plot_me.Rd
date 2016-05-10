@@ -5,7 +5,7 @@
 \title{Plot marginal effects from two-way interactions in linear regressions}
 \source{
 Inspired by:
-\url{http://www.carlislerainey.com/2013/08/27/creating-marginal-effect-plots-for-linear-regression-models-in-r/}
+\url{http://www.statsblogs.com/2013/08/27/creating-marginal-effect-plots-for-linear-regression-models-in-r/}
 }
 \usage{
 plot_me(obj, term1, term2, fitted2, ci = 90, plot = TRUE)
