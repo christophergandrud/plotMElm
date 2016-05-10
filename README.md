@@ -21,8 +21,7 @@ library(plotMElm)
 
 # Estimate model
 states <- as.data.frame(state.x77)
-m1 <- lm(Murder ~ Income * Population, 
-         data = states)
+m1 <- lm(Murder ~ Income * Population, data = states)
 
 # Plot marginal effect of Income across the observed range of Population
 plot_me(m1, 'Income', 'Population')

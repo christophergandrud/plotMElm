@@ -1,3 +1,7 @@
+# Version 0.1.2
+
+- Use point range when Term 2 has less than or equal to 5 values.
+
 # Version 0.1.1
 
 - Allow any confidence level with `ci` argument.
