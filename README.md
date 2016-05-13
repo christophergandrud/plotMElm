@@ -29,12 +29,16 @@ plot_me(m1, 'Income', 'Population')
 
 ![plot of chunk murder-me-example](figure/murder-me-example-1.png)
 
-## Categorical Term 2 
+## Categorical (Factor) Term 2
 
-When the second term in the interaction is categorical (detected by having 5 or fewer categories) then point-ranges are plotted:
+When the second term in the interaction is a categorical (factor) variable then point-ranges are plotted. Note that the marginal effect is in terms of the 
+reference category:
 
 
 ```r
+# Set Term 2 as a factor variable
+mtcars$cyl <- as.factor(mtcars$cyl)
+
 # Estimate model
 m2 <- lm(mpg ~ wt * cyl, data = mtcars)
 

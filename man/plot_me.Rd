@@ -8,7 +8,7 @@ Inspired by:
 \url{http://www.statsblogs.com/2013/08/27/creating-marginal-effect-plots-for-linear-regression-models-in-r/}
 }
 \usage{
-plot_me(obj, term1, term2, fitted2, ci = 90, plot = TRUE)
+plot_me(obj, term1, term2, fitted2, ci = 95, plot = TRUE)
 }
 \arguments{
 \item{obj}{fitted model object from \code{lm}.}
@@ -23,7 +23,7 @@ interaction's variable name.}
 If unspecified, then all unique observed values are used.}
 
 \item{ci}{numeric. confidence interval level, expressed on the ]0, 100[]
-interval.}
+interval. The default is \code{95}.}
 
 \item{plot}{boolean. return plot if TRUE; return data.frame of marginal
 effects estimates if FALSE}
@@ -35,6 +35,7 @@ a \code{gg} class ggplot2 object
 Plot marginal effects from two-way interactions in linear regressions
 }
 \examples{
+## Continuous Term1 and Term2
 # Estimate model
 states <- as.data.frame(state.x77)
 m1 <- lm(Murder ~ Income * Population, data = states)
@@ -46,7 +47,22 @@ plot_me(m1, 'Income', 'Population', ci = 95)
 # Return marginal effects as a data frame
 plot_me(m1, 'Income', 'Population', plot = FALSE)
 
+## Term 2 with <= 5 unique values
+# Estimate model
+m2 <- lm(mpg ~ wt * cyl, data = mtcars)
 
+# Plot marginal effect of Weight across the Number of Cylinders (continuous)
+plot_me(m2, 'wt', 'cyl')
+
+## Categorical (factor) Term2
+# Set Term 2 as a factor variable
+mtcars$cyl <- as.factor(mtcars$cyl)
+
+# Estimate model
+m3 <- lm(mpg ~ wt * cyl, data = mtcars)
+
+# Plot marginal effect of Weight across the Number of Cylinders (factor)
+plot_me(m3, 'wt', 'cyl')
 
 }
 
