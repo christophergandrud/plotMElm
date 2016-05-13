@@ -3,13 +3,13 @@ Type: Package
 Title: Plot Marginal Effects from Linear Models
 Description: Plot marginal effects for interactions estimated
     from linear models.
-Version: 0.1.2
-Date: 2016-05-10
+Version: 0.1.3
+Date: 2016-05-13
 Authors@R: c(
     person("Christopher", "Gandrud", email = "christopher.gandrud@gmail.com",
     role = c("aut", "cre"))
     )
-BugReports: https://github.com/christophergandrud/fredr/issues
+BugReports: https://github.com/christophergandrud/plotMElm/issues
 License: GPL (>= 3)
 Imports:
     ggplot2

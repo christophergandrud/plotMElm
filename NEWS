@@ -1,3 +1,8 @@
+# Version 0.1.3
+
+- Correctly find and plot marginal effects with Term 2 is a categorical
+(factor) variable.
+
 # Version 0.1.2
 
 - Use point range when Term 2 has less than or equal to 5 values.

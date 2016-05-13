@@ -4,7 +4,7 @@ plotMElm
 A simple R package to plot marginal effects from interactions estimated
 from linear models.
 
-[![Build Status](https://travis-ci.org/christophergandrud/plotMElm.svg?branch=master)](https://travis-ci.org/christophergandrud/plotMElm)
+[![Build Status](https://travis-ci.org/christophergandrud/plotMElm.png)](https://travis-ci.org/christophergandrud/plotMElm) [![CRAN Version](http://www.r-pkg.org/badges/version/plotMElm)](http://cran.r-project.org/package=plotMElm) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/plotMElm) ![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/plotMElm)
 
 # Examples
 
@@ -47,6 +47,8 @@ plot_me(m2, 'wt', 'cyl')
 ```
 
 ![plot of chunk cars-example](figure/cars-example-1.png)
+
+Note that point ranges will also be used if there are five or fewer fitted values.
 
 ## See also 
 
