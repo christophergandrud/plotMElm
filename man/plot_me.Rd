@@ -56,7 +56,8 @@ plot_me(m2, 'wt', 'cyl')
 
 ## Categorical (factor) Term2
 # Set Term 2 as a factor variable
-mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$cyl <- factor(mtcars$cyl,
+                 labels = c('4 Cyl', '6 Cyl', '8 Cyl'))
 
 # Estimate model
 m3 <- lm(mpg ~ wt * cyl, data = mtcars)

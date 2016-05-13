@@ -36,7 +36,8 @@
 #'
 #' ## Categorical (factor) Term2
 #' # Set Term 2 as a factor variable
-#' mtcars$cyl <- as.factor(mtcars$cyl)
+#' mtcars$cyl <- factor(mtcars$cyl,
+#'                  labels = c('4 Cyl', '6 Cyl', '8 Cyl'))
 #'
 #' # Estimate model
 #' m3 <- lm(mpg ~ wt * cyl, data = mtcars)
@@ -69,6 +70,7 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
     term2_dist <- obj$model[, term2]
     factor_term2 <- is.factor(term2_dist)
     if (isTRUE(factor_term2)) {
+        term2_original <- term2
         term2 <- sprintf('%s%s', term2, levels(term2_dist)[-1])
     }
 
@@ -131,15 +133,15 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
               #           alpha = 0.1) +
                 geom_hline(yintercept = 0, linetype = 'dotted') +
                 geom_pointrange() +
-               # scale_x_continuous(breaks = parts$fitted) +
-                xlab(sprintf('\n%s', term2)) +
                 ylab(sprintf('Marginal effect of\n%s\n', term1)) +
                 theme_bw()
             if (!is.factor(parts$fitted2)) {
-                p + scale_x_continuous(breaks = parts$fitted)
+                p + scale_x_continuous(breaks = parts$fitted) +
+                    xlab(sprintf('\n%s', term2))
             }
             else if (is.factor(parts$fitted2)) {
-                p + scale_x_discrete(labels = parts$fitted2)
+                p + scale_x_discrete(labels = parts$fitted2) +
+                    xlab(sprintf('\n%s', term2_original))
             }
         }
 

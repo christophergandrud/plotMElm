@@ -33,7 +33,8 @@ reference category:
 
 ```{r cars-example}
 # Set Term 2 as a factor variable
-mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$cyl <- factor(mtcars$cyl, 
+                     labels = c('4 Cyl', '6 Cyl', '8 Cyl'))
 
 # Estimate model
 m2 <- lm(mpg ~ wt * cyl, data = mtcars)
