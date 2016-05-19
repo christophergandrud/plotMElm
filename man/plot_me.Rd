@@ -44,8 +44,7 @@ to find and plot. If \code{'standard'} then standard confidence intervals
 If \code{fdr} then confidence intervals are found using critical t-statistics
 to limit the false discovery rate (limit over confidence).}
 
-\item{t_statistic}{numeric vector of length 1 or the same length as
-\code{fitted2}. Custom t-statistic for finding the confidence interval.
+\item{t_statistic}{numeric. Custom t-statistic for finding the confidence interval.
 May be useful if the user want to use a funciton like \code{findMultiLims}
 to find the t-statistic.}
 

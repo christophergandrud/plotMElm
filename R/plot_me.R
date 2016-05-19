@@ -14,8 +14,7 @@
 #' (e.g. those suggested by Brambor, Clark, and Golder 2006) are found.
 #' If \code{fdr} then confidence intervals are found using critical t-statistics
 #' to limit the false discovery rate (limit over confidence).
-#' @param t_statistic numeric vector of length 1 or the same length as
-#' \code{fitted2}. Custom t-statistic for finding the confidence interval.
+#' @param t_statistic numeric. Custom t-statistic for finding the confidence interval.
 #' May be useful if the user want to use a funciton like \code{findMultiLims}
 #' to find the t-statistic.
 #' @param plot boolean. return plot if \code{TRUE}; return \code{data.frame} of
@@ -161,14 +160,15 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, ci_type = 'standard',
             ci <- ci / 100
             t_statistic <- fdrInteraction(me.vec = parts$dy_dx, me.sd.vec = parts$se_dy_dx,
                                 df = obj$df, level = ci)
+            message(sprintf('t-statistic used: %s', round(t_statistic,
+                                                          digits = 3)))
         }
         else if (ci_type == 'boot') {
             stop('boot not supported yet . . .', call. = FALSE)
         }
     }
     else if (!missing(t_statistic)) {
-        message('Using custom t-statistic (ignoring ci_type argument).',
-                call. = FALSE)
+        message('Using custom t-statistic (ignoring ci_type argument).')
     }
 
     parts$upper <- parts$dy_dx + t_statistic * parts$se_dy_dx
@@ -179,7 +179,7 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, ci_type = 'standard',
         if (length(parts$fitted2) > 5) {
             ggplot(parts, aes(fitted2, dy_dx)) +
                 geom_rug(data = term2_dist, aes(x = term2),
-                         sides = 'b', alpha = 0.1, inherit.aes = FALSE) +
+                         sides = 'b', alpha = 0.5, inherit.aes = FALSE) +
                 geom_hline(yintercept = 0, linetype = 'dotted') +
                 geom_line() +
                 geom_ribbon(data = parts, aes(ymin = lower, ymax = upper),
