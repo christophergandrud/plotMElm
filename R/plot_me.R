@@ -93,7 +93,7 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
             fitted2 <- sort(unique(term2_dist$term2))
         }
         else if (isTRUE(factor_term2)) {
-            fitted2 <- levels(term2_dist$term2)[-1]
+            fitted2 <- levels(term2_dist$term2)
         }
     }
 
@@ -104,11 +104,17 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
                                                cov = cov_, ci_ = ci)
     else {
         parts <- data.frame()
-        for (i in 1:length(int_term)) {
-            one_level <- me_one(term1_ = term1, int_term_ = int_term[i],
-                                fitted2_ = 1,  beta_hat = beta_hat_,
-                                cov = cov_, ci_ = ci)
-            one_level$fitted2 <- fitted2[i]
+        for (i in 1:length(fitted2)) {
+            if (i == 1) {
+                one_level <- me_one(term1_ = term1, beta_hat = beta_hat_,
+                                    ci_ = ci, obj_ = obj)
+            }
+            else {
+                one_level <- me_one(term1_ = term1, int_term_ = int_term[i-1],
+                                    fitted2_ = 1,  beta_hat = beta_hat_,
+                                    cov = cov_, ci_ = ci)
+            }
+            one_level$fitted2_ <- fitted2[i]
             parts <- rbind(parts, one_level)
         }
         parts$fitted2 <- factor(parts$fitted2, labels = fitted2)

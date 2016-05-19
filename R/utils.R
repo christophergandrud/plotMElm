@@ -3,9 +3,10 @@
 #' @noRd
 
 me_one <- function(term1_, int_term_, fitted2_,
-                   beta_hat, cov, ci_, term2_0 = FALSE, obj_)
+                   beta_hat, cov, ci_, obj_)
 {
-    if (!isTRUE(term2_0)) {
+    if (!missing(int_term_)) {
+        # Point estimates
         dy_dx <- beta_hat[term1_] + beta_hat[int_term_] * fitted2_
 
         # Standard error
@@ -14,8 +15,12 @@ me_one <- function(term1_, int_term_, fitted2_,
                              2 * fitted2_ *cov[term1_, int_term_])
     }
 
-    else if (isTRUE(term2_0)) {
+    else if (missing(int_term_)) {
+        fitted2_ <- 1
+        # Point estimates
         dy_dx <- beta_hat[term1_]
+
+        # Standard error
         all_b_se <- coef(summary(obj_))[, 'Std. Error']
         se_dy_dx <- all_b_se[term1_]
     }
