@@ -25,12 +25,7 @@ me_one <- function(term1_, int_term_, fitted2_,
         se_dy_dx <- all_b_se[term1_]
     }
 
-    # Confidence interval
-    z <- qnorm(ci_ / 100)
-    upper <- dy_dx + z * se_dy_dx
-    lower <- dy_dx - z * se_dy_dx
-
-    parts_temp <- data.frame(cbind(fitted2_, dy_dx, lower, upper))
+    parts_temp <- data.frame(cbind(fitted2_, dy_dx, se_dy_dx))
     names(parts_temp) <- c('fitted2', names(parts_temp[-1]))
     return(parts_temp)
 }

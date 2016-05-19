@@ -2,6 +2,7 @@
 
 export(plot_me)
 import(ggplot2)
+importFrom(interactionTest,fdrInteraction)
 importFrom(stats,coef)
 importFrom(stats,qnorm)
 importFrom(stats,vcov)

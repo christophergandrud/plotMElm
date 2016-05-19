@@ -12,6 +12,7 @@ Authors@R: c(
 BugReports: https://github.com/christophergandrud/plotMElm/issues
 License: GPL (>= 3)
 Imports:
-    ggplot2
+    ggplot2,
+    interactionTest
 LazyData: TRUE
 RoxygenNote: 5.0.1

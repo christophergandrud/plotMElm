@@ -9,8 +9,13 @@
 #' If unspecified, then all unique observed values are used.
 #' @param ci numeric. confidence interval level, expressed on the ]0, 100[]
 #' interval. The default is \code{95}.
-#' @param plot boolean. return plot if TRUE; return data.frame of marginal
-#' effects estimates if FALSE
+#' @param ci_type character string specifying the type of confidence interval
+#' to find and plot. If \code{'standard'} then standard confidence intervals
+#' (e.g. those suggested by Brambor, Clark, and Golder 2006) are found.
+#' If \code{fdr} then confidence intervals are found using critical t-statistics
+#' to limit the false discovery rate.
+#' @param plot boolean. return plot if \code{TRUE}; return \code{data.frame} of
+#' marginal effects estimates if \code{FALSE}.
 #'
 #' @return a \code{gg} class ggplot2 object
 #'
@@ -49,11 +54,26 @@
 #' \url{http://www.statsblogs.com/2013/08/27/creating-marginal-effect-plots-for-linear-regression-models-in-r/}
 #'
 #' @importFrom stats coef qnorm vcov
+#' @importFrom interactionTest fdrInteraction
 #' @import ggplot2
 #'
+#'
+#' @source Benjamini, Yoav, and Yosef Hochberg. 1995. "Controlling the False
+#' Discovery Rate: A Practical and Powerful Approach to Multiple Testing".
+#' Journal of the Royal Statistical Society, Series B 57(1): 289--300.
+#'
+#' Brambor, Thomas, William Roberts Clark, and Matt Golder.
+#' "Understanding interaction models: Improving empirical analyses". Political
+#' Analysis 14.1 (2006): 63-82.
+#'
+#' Esarey, Justin, and Jane Lawrence Sumner. 2015. "Marginal Effects in
+#' Interaction Models: Determining and Controlling the False Positive Rate".
+#' URL: \url{http://jee3.web.rice.edu/interaction-overconfidence.pdf}.
 #' @export
 
-plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
+plot_me <- function(obj, term1, term2, fitted2, ci = 95, ci_type = 'standard',
+                    plot = TRUE)
+{
 
     dy_dx <- lower <- upper <- NULL
     # Sanity checks
@@ -62,6 +82,10 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
 
     if (is.factor(term1)) stop('term1 cannot be a factor variable',
                                call. = FALSE)
+
+    ci_type <- tolower(ci_type)
+    if (!(ci_type %in% c('standard', 'fdr'))) stop(sprintf('ci_type %s not supported.',
+                                                    ci_type), call. = FALSE)
 
     beta_hat_ <- coef(obj)
     cov_ <- vcov(obj)
@@ -101,18 +125,18 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
                                                int_term_ = int_term,
                                                fitted2_ = fitted2,
                                                beta_hat = beta_hat_,
-                                               cov = cov_, ci_ = ci)
+                                               cov = cov_)
     else {
         parts <- data.frame()
         for (i in 1:length(fitted2)) {
             if (i == 1) {
                 one_level <- me_one(term1_ = term1, beta_hat = beta_hat_,
-                                    ci_ = ci, obj_ = obj)
+                                    obj_ = obj)
             }
             else {
                 one_level <- me_one(term1_ = term1, int_term_ = int_term[i-1],
                                     fitted2_ = 1,  beta_hat = beta_hat_,
-                                    cov = cov_, ci_ = ci)
+                                    cov = cov_)
             }
             one_level$fitted2 <- fitted2[i]
             parts <- rbind(parts, one_level)
@@ -120,6 +144,20 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
         parts$fitted2 <- factor(parts$fitted2, labels = fitted2,
                                 levels = parts$fitted2[1:length(parts$fitted2)])
     }
+
+    # Find confidence intervals
+    if (ci_type == 'standard') {
+        t <- qnorm(ci / 100)
+    }
+    else if (ci_type == 'fdr') {
+        ci <- ci / 100
+        t <- fdrInteraction(me.vec = parts$dy_dx, me.sd.vec = parts$se_dy_dx,
+                            df = obj$df, level = ci)
+    }
+
+    parts$upper <- parts$dy_dx + t * parts$se_dy_dx
+    parts$lower <- parts$dy_dx - t * parts$se_dy_dx
+
 
     if (plot) {
         if (length(parts$fitted2) > 5) {
