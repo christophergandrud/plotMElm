@@ -155,11 +155,11 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, ci_type = 'standard',
     # Find confidence intervals
     if (missing(t_statistic)) {
         if (ci_type == 'standard') {
-            t <- qnorm(ci / 100)
+            t_statistic <- qnorm(ci / 100)
         }
         else if (ci_type == 'fdr') {
             ci <- ci / 100
-            t <- fdrInteraction(me.vec = parts$dy_dx, me.sd.vec = parts$se_dy_dx,
+            t_statistic <- fdrInteraction(me.vec = parts$dy_dx, me.sd.vec = parts$se_dy_dx,
                                 df = obj$df, level = ci)
         }
         else if (ci_type == 'boot') {
