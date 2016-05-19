@@ -114,10 +114,11 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
                                     fitted2_ = 1,  beta_hat = beta_hat_,
                                     cov = cov_, ci_ = ci)
             }
-            one_level$fitted2_ <- fitted2[i]
+            one_level$fitted2 <- fitted2[i]
             parts <- rbind(parts, one_level)
         }
-        parts$fitted2 <- factor(parts$fitted2, labels = fitted2)
+        parts$fitted2 <- factor(parts$fitted2, labels = fitted2,
+                                levels = parts$fitted2[1:length(parts$fitted2)])
     }
 
     if (plot) {
@@ -133,28 +134,22 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
                 ylab(sprintf('Marginal effect of\n%s\n', term1)) +
                 theme_bw()
         }
-        else if (length(parts$fitted2) <= 5 || is.factor(parts$fitted2) ) {
+        else if (length(parts$fitted2) <= 5 || is.factor(parts$fitted2)) {
+            p <- ggplot(parts, aes(fitted2, dy_dx, ymin = lower,
+                                   ymax = upper)) +
+                        geom_pointrange() +
+                        geom_hline(yintercept = 0, linetype = 'dotted') +
+                        ylab(sprintf('Marginal effect of\n%s\n', term1)) +
+                        theme_bw()
             if (!is.factor(parts$fitted2)) {
-                p <- ggplot(parts, aes(fitted2, dy_dx, ymin = lower,
-                        ymax = upper)) +
-                            geom_pointrange() +
-                            geom_line(alpha = 0.3) +
-                            scale_x_continuous(breaks = parts$fitted) +
-                            xlab(sprintf('\n%s', term2))
+                    p + geom_line(alpha = 0.3) +
+                        scale_x_continuous(breaks = parts$fitted) +
+                        xlab(sprintf('\n%s', term2))
             }
             else if (is.factor(parts$fitted2)) {
-                parts$fitted2 <- factor(parts$fitted2,
-                                        levels = parts$fitted2[
-                                            1:length(parts$fitted2)])
-                p <- ggplot(parts, aes(fitted2, dy_dx, ymin = lower,
-                        ymax = upper)) +
-                            geom_pointrange() +
-                            scale_x_discrete(labels = parts$fitted2) +
-                            xlab(sprintf('\n%s', term2_original))
+                p + scale_x_discrete(labels = parts$fitted2) +
+                    xlab(sprintf('\n%s', term2_original))
             }
-            p + geom_hline(yintercept = 0, linetype = 'dotted') +
-            ylab(sprintf('Marginal effect of\n%s\n', term1)) +
-            theme_bw()
         }
 
     } else {

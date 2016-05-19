@@ -31,5 +31,6 @@ me_one <- function(term1_, int_term_, fitted2_,
     lower <- dy_dx - z * se_dy_dx
 
     parts_temp <- data.frame(cbind(fitted2_, dy_dx, lower, upper))
+    names(parts_temp) <- c('fitted2', names(parts_temp[-1]))
     return(parts_temp)
 }
