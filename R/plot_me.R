@@ -85,8 +85,8 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
     if (any(int_term12 %in% names(beta_hat_))) int_term <- int_term12
     else int_term <- int_term21
 
-    term2_dist <- data.frame(fake_y = 0, real_x = term2_dist)
-    names(term2_dist) <- c('term1', 'term2')
+    # For rug plot
+    term2_dist <- data.frame(term2 = term2_dist)
 
     if (missing(fitted2)) {
         if(!isTRUE(factor_term2)) {
@@ -124,8 +124,8 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, plot = TRUE) {
     if (plot) {
         if (length(parts$fitted2) > 5) {
             ggplot(parts, aes(fitted2, dy_dx)) +
-                geom_rug(data = term2_dist, aes(x = term2, y = term1), sides = 'b',
-                         alpha = 0.1) +
+                geom_rug(data = term2_dist, aes(x = term2),
+                         sides = 'b', alpha = 0.1, inherit.aes = FALSE) +
                 geom_hline(yintercept = 0, linetype = 'dotted') +
                 geom_line() +
                 geom_ribbon(data = parts, aes(ymin = lower, ymax = upper),
