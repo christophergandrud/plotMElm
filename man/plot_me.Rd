@@ -20,8 +20,8 @@ Interaction Models: Determining and Controlling the False Positive Rate".
 URL: \url{http://jee3.web.rice.edu/interaction-overconfidence.pdf}.
 }
 \usage{
-plot_me(obj, term1, term2, fitted2, ci = 95, ci_type = "standard", t,
-  plot = TRUE)
+plot_me(obj, term1, term2, fitted2, ci = 95, ci_type = "standard",
+  t_statistic, plot = TRUE)
 }
 \arguments{
 \item{obj}{fitted model object from \code{lm}.}
@@ -44,7 +44,8 @@ to find and plot. If \code{'standard'} then standard confidence intervals
 If \code{fdr} then confidence intervals are found using critical t-statistics
 to limit the false discovery rate (limit over confidence).}
 
-\item{t}{numeric. Custom t-statistic for finding the confidence interval.
+\item{t_statistic}{numeric vector of length 1 or the same length as
+\code{fitted2}. Custom t-statistic for finding the confidence interval.
 May be useful if the user want to use a funciton like \code{findMultiLims}
 to find the t-statistic.}
 
