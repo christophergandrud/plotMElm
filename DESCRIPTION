@@ -3,7 +3,7 @@ Type: Package
 Title: Plot Marginal Effects from Linear Models
 Description: Plot marginal effects for interactions estimated
     from linear models.
-Version: 0.1.3
+Version: 0.1.4
 Date: 2016-05-19
 Authors@R: c(
     person("Christopher", "Gandrud", email = "christopher.gandrud@gmail.com",

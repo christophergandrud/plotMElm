@@ -20,7 +20,7 @@ Interaction Models: Determining and Controlling the False Positive Rate".
 URL: \url{http://jee3.web.rice.edu/interaction-overconfidence.pdf}.
 }
 \usage{
-plot_me(obj, term1, term2, fitted2, ci = 95, ci_type = "standard",
+plot_me(obj, term1, term2, fitted2, ci = 95, ci_type = "standard", t,
   plot = TRUE)
 }
 \arguments{
@@ -35,14 +35,18 @@ interaction's variable name.}
 \item{fitted2}{numeric vector of fitted values of \code{term2} to plot for.
 If unspecified, then all unique observed values are used.}
 
-\item{ci}{numeric. confidence interval level, expressed on the ]0, 100[]
+\item{ci}{numeric. confidence interval level, expressed on the ]0, 100[
 interval. The default is \code{95}.}
 
 \item{ci_type}{character string specifying the type of confidence interval
 to find and plot. If \code{'standard'} then standard confidence intervals
 (e.g. those suggested by Brambor, Clark, and Golder 2006) are found.
 If \code{fdr} then confidence intervals are found using critical t-statistics
-to limit the false discovery rate.}
+to limit the false discovery rate (limit over confidence).}
+
+\item{t}{numeric. Custom t-statistic for finding the confidence interval.
+May be useful if the user want to use a funciton like \code{findMultiLims}
+to find the t-statistic.}
 
 \item{plot}{boolean. return plot if \code{TRUE}; return \code{data.frame} of
 marginal effects estimates if \code{FALSE}.}
@@ -62,6 +66,9 @@ m1 <- lm(Murder ~ Income * Population, data = states)
 # Plot marginal effect of Income across the observed range of Population
 # on the Murder rate
 plot_me(m1, 'Income', 'Population', ci = 95)
+
+# CI created using false discovery rate limiting t-statistic
+plot_me(m1, 'Income', 'Population', ci_type = 'fdr')
 
 # Return marginal effects as a data frame
 plot_me(m1, 'Income', 'Population', plot = FALSE)

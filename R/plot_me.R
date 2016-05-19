@@ -7,13 +7,17 @@
 #' interaction's variable name.
 #' @param fitted2 numeric vector of fitted values of \code{term2} to plot for.
 #' If unspecified, then all unique observed values are used.
-#' @param ci numeric. confidence interval level, expressed on the ]0, 100[]
+#' @param ci numeric. confidence interval level, expressed on the ]0, 100[
 #' interval. The default is \code{95}.
 #' @param ci_type character string specifying the type of confidence interval
 #' to find and plot. If \code{'standard'} then standard confidence intervals
 #' (e.g. those suggested by Brambor, Clark, and Golder 2006) are found.
 #' If \code{fdr} then confidence intervals are found using critical t-statistics
-#' to limit the false discovery rate.
+#' to limit the false discovery rate (limit over confidence).
+#' @param t_statistic numeric vector of length 1 or the same length as
+#' \code{fitted2}. Custom t-statistic for finding the confidence interval.
+#' May be useful if the user want to use a funciton like \code{findMultiLims}
+#' to find the t-statistic.
 #' @param plot boolean. return plot if \code{TRUE}; return \code{data.frame} of
 #' marginal effects estimates if \code{FALSE}.
 #'
@@ -28,6 +32,9 @@
 #' # Plot marginal effect of Income across the observed range of Population
 #' # on the Murder rate
 #' plot_me(m1, 'Income', 'Population', ci = 95)
+#'
+#' # CI created using false discovery rate limiting t-statistic
+#' plot_me(m1, 'Income', 'Population', ci_type = 'fdr')
 #'
 #' # Return marginal effects as a data frame
 #' plot_me(m1, 'Income', 'Population', plot = FALSE)
@@ -72,7 +79,7 @@
 #' @export
 
 plot_me <- function(obj, term1, term2, fitted2, ci = 95, ci_type = 'standard',
-                    plot = TRUE)
+                    t_statistic, plot = TRUE)
 {
 
     dy_dx <- lower <- upper <- NULL
@@ -84,8 +91,8 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, ci_type = 'standard',
                                call. = FALSE)
 
     ci_type <- tolower(ci_type)
-    if (!(ci_type %in% c('standard', 'fdr'))) stop(sprintf('ci_type %s not supported.',
-                                                    ci_type), call. = FALSE)
+    if (!(ci_type %in% c('standard', 'fdr', 'boot')))
+        stop(sprintf("ci_type '%s' not supported.", ci_type), call. = FALSE)
 
     beta_hat_ <- coef(obj)
     cov_ <- vcov(obj)
@@ -146,17 +153,26 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, ci_type = 'standard',
     }
 
     # Find confidence intervals
-    if (ci_type == 'standard') {
-        t <- qnorm(ci / 100)
+    if (missing(t_statistic)) {
+        if (ci_type == 'standard') {
+            t <- qnorm(ci / 100)
+        }
+        else if (ci_type == 'fdr') {
+            ci <- ci / 100
+            t <- fdrInteraction(me.vec = parts$dy_dx, me.sd.vec = parts$se_dy_dx,
+                                df = obj$df, level = ci)
+        }
+        else if (ci_type == 'boot') {
+            stop('boot not supported yet . . .', call. = FALSE)
+        }
     }
-    else if (ci_type == 'fdr') {
-        ci <- ci / 100
-        t <- fdrInteraction(me.vec = parts$dy_dx, me.sd.vec = parts$se_dy_dx,
-                            df = obj$df, level = ci)
+    else if (!missing(t_statistic)) {
+        message('Using custom t-statistic (ignoring ci_type argument).',
+                call. = FALSE)
     }
 
-    parts$upper <- parts$dy_dx + t * parts$se_dy_dx
-    parts$lower <- parts$dy_dx - t * parts$se_dy_dx
+    parts$upper <- parts$dy_dx + t_statistic * parts$se_dy_dx
+    parts$lower <- parts$dy_dx - t_statistic * parts$se_dy_dx
 
 
     if (plot) {
