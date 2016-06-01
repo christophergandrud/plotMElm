@@ -74,12 +74,17 @@ plot_me(m1, 'Income', 'Population', ci_type = 'fdr')
 
 Here is the result compared with standard confidence intervals:
 
+
+```
+## t-statistic used: 2.269
+```
+
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
 
 You can also use the `t_statistic` argument to supply custom t-statistics
 for creating the marginal effect confidence intervals. This is useful if you 
 want to use a funciton like `findMultiLims` from the 
-[interactTest](https://cran.r-project.org=interactionTest) to find t-statistics 
+[interactTest](https://cran.r-project.org/package=interactionTest) to find t-statistics 
 that can be used to correct confidence intervals for underconfidence.
 
 ## See also 
