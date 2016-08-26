@@ -86,7 +86,7 @@ plot_me <- function(obj, term1, term2, fitted2, ci = 95, ci_type = 'standard',
     if (class(obj) != 'lm') stop('Only lm model objects can be used.',
             call. = FALSE)
 
-    if (is.factor(term1)) stop('term1 cannot be a factor variable',
+    if (is.factor(obj$model[, term1])) stop('term1 cannot be a factor variable.',
                                call. = FALSE)
 
     ci_type <- tolower(ci_type)

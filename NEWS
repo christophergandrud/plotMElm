@@ -1,3 +1,7 @@
+# Version 0.1.5
+
+- Resolved a bug where `plot_me` didn't actually check `term1`'s type.
+
 # Version 0.1.4
 
 - Allow user to find false discovery rate limiting confidence intervals with
