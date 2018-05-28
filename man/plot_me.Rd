@@ -92,4 +92,3 @@ m3 <- lm(mpg ~ wt * cyl, data = mtcars)
 plot_me(m3, 'wt', 'cyl')
 
 }
-
